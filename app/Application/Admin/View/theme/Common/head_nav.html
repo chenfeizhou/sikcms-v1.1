@@ -1,0 +1,76 @@
+<!-------头部导航---------->
+   <style type="text/css">
+	 #header-menu{
+	   float:left;
+	   font-size:14px;
+	   height:54px;
+	   line-height:53px;
+	   padding:0 0 0 10px;
+	 }
+	  #header-menu a{
+	   line-height:53px;
+	   margin:0 25px 0 0;
+	   color:#9c9c9c;
+	  }
+	    #header-menu a:hover{
+		color:#fafafa;
+		text-transform:uppercase;
+		}
+		#header-menu a.active{
+		 color:#fafafa		
+		}
+	</style>
+<div id="page-header">
+    <div id="header-logo">
+        <a href="javascript:;" class="tooltip-button" data-placement="bottom" title="关闭侧边栏" id="close-sidebar">
+            <i class="glyph-icon icon-caret-left"></i>
+        </a>  
+        <a href="javascript:;" class="tooltip-button hidden" data-placement="bottom" title="打开侧边栏" id="rm-close-sidebar">
+            <i class="glyph-icon icon-caret-right"></i>
+        </a>
+        {:strip_tags(C('SYSTEM_NAME'))}<small class="opacity-80">{:C('SIKCMS_VERSION')}</small>
+    </div>
+    	<div id="header-menu">
+                <foreach name="menuList" item="menu">
+                 <a href="{:U('Index/index',array('menuid'=>$menu['id']))}" >{$menu.name}</a>
+                </foreach>
+	</div>
+    <div class="user-profile hidden-mobile">
+        <a href="index.php" target="new" title="" class="clearfix">
+           <i class="glyph-icon icon-home"></i> 前台首页
+        </a>
+    </div>
+    <div class="user-profile dropdown">
+        <a href="javascript:;" title="" class="user-ico clearfix" data-toggle="dropdown">
+            <img width="36" src="__STATIC__/assets/images/gravatar.jpg" alt="">
+            <span>{$userInfo['username']}</span>
+            <i class="glyph-icon icon-chevron-down"></i>
+        </a>
+        <ul class="dropdown-menu float-right">
+            <li>
+                <a href="javascript:;" title="">
+                    <i class="glyph-icon icon-user mrg5R"></i>
+                    {$userInfo['realname']}
+                </a>
+            </li>
+            <li>
+                <a href="javascript:;" title="">
+                    <i class="glyph-icon icon-cog mrg5R"></i>
+                    个人信息
+                </a>
+            </li>
+             <li>
+                <a href="{:U('Users/changePassword')}" title="" target="iframeId-content">
+                    <i class="glyph-icon icon-flag mrg5R"></i>
+                    修改密码
+                </a>
+            </li>
+            <li>
+                <a title="" href="{:U('Public/logout')}">
+                    <i class="glyph-icon icon-signout font-size-13 mrg5R"></i>
+                    <span class="font-bold">退出</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<!--头部导航-->
+<div class="doc-header">
+<div class="navbar navbar-big bg-white bg-inverse  nav-big ">
+    <div class="line">
+        <div class="xl12 xs2 xm2 xb1">
+            <button class="button icon-navicon float-right" data-target="#header-demo3">
+            </button>
+            <!--<img src=" "/>-->
+        </div>
+
+        <div class=" xl12 xs10 xm10 xb11  padding-top  padding-bottom nav-navicon" >
+            <div class="xs8 xm8 xb6">
+                <ul class="nav nav-menu nav-inline">
+                    <li><a  href="/">首页</a> </li>
+                    <?php nav($nav); ?>
+                    <li><a  href="{:U('Page/zhaop')}">邀你加入</a> </li>
+                </ul>
+            </div>
+            <div class="xs4 xm4 xb3">
+                <form>
+                    <div class="input-group padding-little-top">
+                            <input type="text" class="input border-main" name="keywords" size="30" placeholder="关键词" />
+                            <span class="addbtn">
+                                <button type="button" class="button bg-main">
+                                    搜索</button>
+                            </span>
+                    </div>
+                </form>
+            </div>
+            <div class="xs3 xm3 xb2">
+                &nbsp;<div class="button-group">
+                             <button type="button"   class="button dropdown-toggle icon-user">
+                                 <span href="javascript:void(0)" >个人中心</span> <span class="downward"></span>
+                             </button>
+                             <ul class="drop-menu">
+                                 <?php if($userinfo){ ?>
+                                  <li><a style='font-size: 14px;color:black;' href="{:U('Ucenter/index')}">个人中心</a> </li>
+                                   <li><a style='font-size: 14px;color:black;' href="{:U('Member/logout')}">退出</a> </li>
+                                 <?php }else{ ?>
+                                 <li><a style='font-size: 14px;color:black;' href="{:U('Member/register')}">注册</a> </li>
+                                 <li><a style='font-size: 14px;color:black;' href="{:U('Member/login')}">登录</a> </li>
+                                 <?php } ?>
+                             </ul>
+                     </div> 
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<?php 
+function nav($nav){
+?>
+<?php foreach($nav as $key=>$item){ ?>  
+<li><a  href="{:U('Article/lists',array('cid'=>$item['id']))}">{$item.name}
+        <?php if(is_array($item['sub_item'])&& !empty($item['sub_item']))  { ?>
+        <span class="arrow"></span>
+        <?php } ?>
+    </a> 
+    <?php if(is_array($item['sub_item'])&& !empty($item['sub_item']))  { ?>
+    <ul  <?php if($item['level']==1){ ?>class='drop-menu' <?php } ?>>
+        <?php nav($item['sub_item']); ?>
+</ul>
+<?php } } } ?>

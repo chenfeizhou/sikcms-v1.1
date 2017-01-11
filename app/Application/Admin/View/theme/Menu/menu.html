@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>菜单管理</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <include  file="Common:script"/>
+    <script type="text/javascript" src="__STATIC__/assets/layer/jquery1.9.1.js?{:C('KLCHOU_BUILD')}"></script>
+
+    <script type="text/javascript" src="__STATIC__/assets/layer/layer.js?{:C('KLCHOU_BUILD')}"></script>
+    <body>
+        <!-- #page-title -->
+    <include file="Common:curpos"/>	
+
+
+    <style>
+        .table td {
+            padding: 5px 16px;
+        }
+    </style>
+
+
+
+    <div id="page-content">
+        <div class="row fg-toolbar ui-toolbar ">
+            <a href="#" title="" id="addMenuLayer" class="btn medium bg-gray ">
+                <span class="button-content">添加</span>
+            </a>
+        </div>
+        <p class="font-gray-dark"></p>
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>菜单ID</th>
+                        <th>菜单名称</th>
+                        <th>模块名</th>
+                        <th>方法名</th>
+                        <th>附加参数</th>
+                        <th>菜单级别</th>
+                        <th>排序</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                <volist name="list"  id="item">
+                    <tr class="sub_menu1">
+                        <td>{$item.id}</td>
+                        <td class="font-bold text-left"><a class="menu_tree" is-load="0" menu-level="{$item.level}" onclick="menu_tree(this,'close')" href="javascript:void(0)" note-id="{$item.id}" ><i class="glyph-icon icon-plus"></i> {$item.name}</a> </td>
+                        <td>{$item.controller}</td>
+                        <td>{$item.action}</td>
+                        <td>{$item.params}</td>
+                        <td>{$item.level}</td>
+                        <td>{$item.sort}</td>
+                        <td><if condition="$item['status'] eq 1">显示<elseif condition="$item['status'] eq 2"  />隐藏<else />删除</if></td>
+                    <td>
+                        <a title=""  href="#" data-placement="top" class="btn medium ui-state-default" data-original-title="Edit">
+                            <span class="glyph-icon icon-edit button-content editMenuLayer" data-id="{$item.id}">编辑</span>
+                        </a>
+                        <a title="" data-id="{$item.id}"  data-placement="top" class="btn small bg-white tooltip-button menuDelete"  href="#" data-original-title="Remove">
+                            <span class="glyph-icon icon-remove " ></span>删除
+                        </a>
+                    </td>
+                    </tr> 
+                  
+                </volist>
+
+                </tbody>
+            </table>  
+        </div>
+        <div class="row">{$page}</div>
+    </div>
+        <script type="text/javascript" src="__STATIC__/assets/layer/jquery1.9.1.js?{:C('KLCHOU_BUILD')}"></script>
+        <script type="text/javascript" src="__STATIC__/assets/validateform/jquery.validate.js?{:C('KLCHOU_BUILD')}"></script>
+     <!----role add--->
+    <include file="menu_add" />
+    <!----role edit--->
+    <include file="menu_edit" />
+    <script>
+        
+       //加载树状选择菜单
+    function load_menu_select(form){
+        var action_url = "{:U('Menu/public_menu_select')}";
+        var form=$('#'+form+'');
+        $("select[name='pid']",form).html('');
+        $.get(action_url, {}, function (data) {
+            $("select[name='pid']",form).append(data.info);
+        });
+    }
+        
+    </script>
+    <script>
+     //树状菜单
+       function menu_tree(a,type){
+            var note_id = $(a).attr('note-id');
+            var is_load = $(a).attr('is-load');
+            var level = parseInt($(a).attr('menu-level'));
+           if(type=="close"){  
+               var url="{:U('Menu/sub_menu')}"
+               //是否已经加载
+               if(is_load!=1){
+                    $.post(url,{id:note_id},function(data){
+                      if(data.status==1){
+                            $(a).attr('onclick',"menu_tree(this,'open')");
+                            $(a).children('i').removeClass('icon-plus');
+                            $(a).children('i').addClass("icon-minus");
+                          $(a).attr('is-load',1);
+                          $(a).parent('td').parent('tr').after(data.info);
+                      }
+                    },'json');
+               }else{
+                    $(a).attr('onclick',"menu_tree(this,'open')");
+                            $(a).children('i').removeClass('icon-plus');
+                            $(a).children('i').addClass("icon-minus");
+                    //显示下级
+                    $(a).parent('td').parent('tr').nextUntil('.sub_menu'+level+'').show();
+               }
+            }else{
+                $(a).children('i').removeClass('icon-minus');
+                $(a).children('i').addClass("icon-plus");
+                $(a).attr('onclick',"menu_tree(this,'close')");
+                //隐藏下级      
+                if(level<2){
+                   $(a).parent('td').parent('tr').nextUntil('.sub_menu'+level+'').hide();
+                }else{
+                      var s = $(a).parent('td').parent('tr').nextAll();
+                      var next_level = parseInt(level)+1;
+                        s.each(function(k,v){
+                            if($(this).attr('class')=='sub_menu'+next_level+''){
+                               $(this).hide();
+                            }else{
+                                return false;
+                            }
+                      });
+                }
+            }
+        }
+        
+    </script>
+    <!--menu delete--->
+    <script type="text/javascript">
+        $('tbody').on('click','.menuDelete', function(){
+        var id = $(this).attr('data-id');
+        var ids  = [id];
+        var delete_menu_url = "{:U('Menu/deleteMenu')}";
+        if (confirm("确定要删除!")){
+        $.post(delete_menu_url, {ids:ids}, function(data){
+        if (data.status == 1){
+            layer.msg('删除成功');
+              window.location.reload();
+            } else{
+               layer.msg('删除失败');
+            }
+            }, 'json');
+        } 
+        });
+    </script>
+</body>
+</html>

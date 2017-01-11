@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<include file="Public/header"/>
+<body>
+    <include file="Public/nav"/> 
+        <br>
+        <div class="container">
+            <div class="line-big">
+                <include file="left"/>
+                <div class="xs10 float-right">
+                    <h4 class="icon-cog text-main"> 个人信息设置</h4>
+                        <div class="tab padding-top">
+                                <div class="tab-head">
+                                        <ul class="tab-nav" style='padding-left:0px;'>
+                                                <li class="active text-main"><a href="#tab-start">个人设置</a> </li>
+                                                <li><a href="#tab-css">修改密码</a> </li>
+                                        </ul>
+                                </div>
+                                <div class="tab-body">
+                                        <div class="tab-panel active" id="tab-start">
+                                            <form id='user_form' class='form-x' method='post' action="{:U('Ucenter/updateUser')}">
+                                              <div class="form-group">
+                                                      <div class="label"><label for="username">选择头像:</label> </div>
+                                                    <div class="field">
+                                                        <select class="input input-auto"  name="head_ico">
+                                                             <volist name='heads' id='vo'>
+                                                                 <option <if condition="$user['header'] eq $vo">selected</if> value="{$vo}">{$vo}</option>
+                                                             </volist>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                               <div class="form-group">
+                                                   <div class="label"><label for="header">头像:</label> </div>
+                                                   <div class="field"><img id="head_img" width="50" src="__STATIC__/avator/{$user['header']}"/></div>
+                                                </div>
+                                               <div class="form-group">
+                                                   <div class="label"><label for="username">用户名:</label> </div>
+                                                   <div class="field"><input type="text" size='50' class="input input-auto" value="{$user['username']}" id="username" readonly="" name="username" size="30" placeholder="昵称"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                   <div class="label"><label for="nicname">昵称:</label> </div>
+                                                   <div class="field"><input type="text" size='50' class="input input-auto" value="{$user['nickname']}" id="nickname" name="nickname" size="30" placeholder="昵称"></div>
+                                                </div>
+                                             <div class="form-button">
+                                                      <button class="button bg-main" type="submit"> 修改</button>
+                                                </div>
+                                            </form>        
+                                        </div>
+                                        <div class="tab-panel" id="tab-css">
+                                <form method="post" id='pass-form' class="form-x" action="{:U('Ucenter/updatePassword')}" >
+                                        <div class="form-group">
+                                            <div class="label"><label for="username">当前密码:</label></div>
+                                            <div class="field"><input type="password" size='50' data-validate="required:密码不能为空" class="input input-auto" name="old_password" size="30" placeholder="旧密码"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="label"><label for="password">新密码:</label> </div>
+                                            <div class="field"> <input type="password" size='50' data-validate="required:新密码不能为空"   class="input input-auto" id="password" name="password" size="30" placeholder="新密码"></div>
+                                        </div>
+                                       <div class="form-group">
+                                            <div class="label"><label for="password">确认密码:</label> </div>
+                                            <div class="field"> <input type="password" size='50' data-validate="required:确认密码不能为空"   class="input input-auto" id="password" name="repassword" size="30" placeholder="确认密码"></div>
+                                        </div>
+                                        <div class="form-button">
+                                            <button class="button bg-main" type="submit"> 确定</button>
+                                            <input class="button" type="reset" value='取消'/>
+                                        </div>
+                                    </form>
+                              </div>
+                            </div>
+                        </div>
+                </div>
+          </div>
+        </div>
+     <include file="Public/footer"/>
+     <script type="text/javascript">
+         $(function(){
+            $("select[name='head_ico']").change(function(){
+               $("#head_img").attr('src',"__STATIC__/avator/"+$(this).val());
+            }); 
+         });
+     </script>
+   </body>
+  </html>

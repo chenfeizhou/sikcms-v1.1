@@ -1,0 +1,25 @@
+<!-------左侧菜单------>
+<div id="page-sidebar" class="scrollable-content">
+    <div id="sidebar-menu">
+        <ul>
+            <foreach name="menuitem" item="menus">
+                <li class="top">
+                    <a href="javascript:;" title="{$menus.name}">
+                        <i class="glyph-icon icon-gear"></i>
+                        {$menus.name}
+                    </a>
+                    <ul>
+                        <foreach name="menus.children" item="item">
+                            <li>
+                                <a href="{$item.url}" target="iframeId-content" title="{$item.name}">
+                                    <i class="glyph-icon icon-chevron-right"></i>
+                                    {$item.name}
+                                </a>
+                            </li>
+                        </foreach>   
+                    </ul>
+                </li>
+            </foreach>
+        </ul>
+    </div>
+</div>

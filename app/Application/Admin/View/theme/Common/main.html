@@ -1,0 +1,57 @@
+<!---#header-page-->
+<include  file="Common:header"/>
+<!-- #page-title -->
+<include  file="Common:curpos"/>
+<div id="page-content">
+    <div class="example-code">
+        
+        <div class="content-box box-toggle">
+            <h3 class="content-box-header ui-state-default">
+                <div class="glyph-icon icon-separator">
+                    <i class="glyph-icon icon-angle-right"></i>
+                </div>
+
+                <span class="float-left">系统说明</span>
+
+            </h3>
+            <div class="content-box-wrapper">
+                <volist name="server_info" id="vo">
+                    <p> {$key} ： <span>{$vo}</span> </p>
+                </volist>
+                <volist name="info" id="item" >
+                    <p>{$k} ：{$item}</p>
+                </volist>
+
+
+            </div>
+        </div>
+        
+        <div class="content-box box-toggle">
+            <h3 class="content-box-header ui-state-default">
+                <div class="glyph-icon icon-separator">
+                    <i class="glyph-icon icon-angle-right"></i>
+                </div>
+
+                <span class="float-left">开发团队</span>
+
+            </h3>
+            <div class="content-box-wrapper">
+                <p>版本所有 www.sikcms.cn</p>
+                <p>负责人 ：陈仙森，He-He</p>  
+                <p>QQ交流群 ：<a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=73acc15173fe0bcf46467e80f2c1ab6e50166f7e59383cb12bcb1b902261bbca">498476759</a></p>  
+                <p>联系邮箱 ：1114526565@qq.com</p>  
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+       var get_version ="{:U('Index/version')}";
+       var version="{:C('SIKCMS_VERSION')}";
+       $.get(get_version,{version:version},function(){
+           
+       });
+    })
+</script>

@@ -1,0 +1,100 @@
+<div id="comment_form">
+    <input type="hidden" name="pid" value="0"/>
+    <input type="hidden" name="reply_userid" value=""/>
+    <input type="hidden" name="channel_id" value="{$info.channel_id}"/>
+    <input type="hidden" name="relation_id" value="{$info.articles_id}"/>
+    <div class="form-group">
+        <div class="field">
+            <textarea class="input" id="comment_body"  placeholder="有种输入评论(^.^)"  name="content" placeholder="" data-validate="required:必填"></textarea>
+        </div>
+    </div>
+    <div class="form-button">
+        <button class="button bg-main" id="post_comment" type="submit">评论</button>
+    </div>
+</div>
+<br>
+<div class="tab" data-toggle="hover">
+    <div class="tab-head">
+        <ul class="tab-nav" style="padding-left: 0px;">
+            <li class="active text-main comment-header "><a href="#tab-start2">评论({$comment_count})</a></li>
+        </ul>
+    </div>
+    <div class="tab-body tab-body-bordered">
+        <div class="tab-panel active" id="tab-start2"> 
+            <div class="comment-body">
+              <include  file="Public/sub_comment" />
+            </div>
+            <br>
+             <div class="form-group"  >
+                <form id="moreform" method="post">
+                <input type="hidden" name="page" value="2"/>
+                <input id="comment_more" class="button bg-main button-block" value="加载更多" tabindex="6" type="submit">
+                 </form>
+             </div>         
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+      
+        $("#post_comment").click(function () {
+              var submit = {
+                channel_id: $("input[name='channel_id']").val(),
+                relation_id: $("input[name='relation_id']").val(),
+                reply_userid: $("input[name='reply_userid']").val(),
+                content: $("#comment_body").val(),
+                pid:$("input[name='pid']").val()
+             }
+             if($("#comment_body").val()==''){
+                 $("#comment_body").parent('.field').parent('.form-group').addClass('check-error');
+                 return false;
+             }
+            var url = "{:U('Comment/addComment')}";
+            $.post(url, submit, function (data) {
+                 if(data.status==1){
+                     alert('评论成功');
+                     window.location.reload();
+                     $("#comment_body").val();
+                 }else{
+                     alert(data.info);
+                 }
+            });
+            return false;
+        });
+        //加载更多
+        $("#comment_more").click(function(){
+            var form=  $("#moreform");
+            var page=$("input[name='page']",form).val();
+            var url="{:U('Comment/ajaxComment')}"
+            var submit = {
+                 channel_id: $("input[name='channel_id']").val(),
+                 relation_id: $("input[name='relation_id']").val(),
+                 page:page
+            }
+            $.post(url,submit,function(data){
+                if(data.status==1){
+                 $('.comment-body').append(data.info);
+                 $("input[name='page']",form).val(data.url.page);
+                }else{
+                    alert(data.info);
+                }
+            },'json');
+            return false;
+        })
+    });
+    
+
+    function comment_reply(a) {
+        var userid = $(a).attr('data-userid');
+        var nickname = $(a).attr('data-nickname');
+        var pid = $(a).attr('data-pid');
+        var re_tag = "<span>@" + nickname + ":</span>"
+        $("input[name='reply_userid']").val(userid);
+        $("input[name='pid']").val(pid);
+        $("#comment_body").val('@' + nickname + ':').focus();
+    }
+</script>
+
+

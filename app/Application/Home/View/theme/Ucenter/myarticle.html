@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<include file="Public/header"/>
+<body>
+    <include file="Public/nav"/> 
+        <br>
+        <div class="container">
+            <div class="line-big">
+                <include file="left"/>
+                <div class="xs10 float-right">
+                    <h4 class="icon-archive text-main"> 我的文章 </h4><br>
+                    <button class="icon-edit button button-small border-main write-article"  />写文章</button>
+                      <div class="tab padding-top">
+                            <div class="tab-head">
+                                        <ul class="tab-nav" style='padding-left:0px;'>
+                                            <volist name="channel" id="vo" key="k">
+                                                <li <if condition="$channel_id eq $vo['id']"> class="active text-main" </if>><a  href="{:U('Ucenter/articles',array('channel_id'=>$vo['id']))}">{$vo.name}</a> </li>
+                                             </volist>
+                                        </ul>
+                                </div>
+                          <div class="tab-body">
+                              <div class="tab-panel active" id="tab-1">
+                                  <volist name="list" id="vo">
+                                      <ul class="list-text list-underline list-striped">
+                                          <li>
+                                              <a class="icon-edit text-main" href="{:U('Ucenter/edit',array('id'=>$vo['id']))}" >编辑</a>
+                                              <a class="icon-close text-yellow"  href="{:U('Ucenter/delete',array('id'=>$vo['id']))}">删除</a>
+                                              <span class="date"><?php echo date('Y-m-d H:i:s',$vo['inputtime']) ?> </span>
+                                              <a target="_blank" href="{:U('Article/info',array('id'=>$vo['id']))}">{$vo.title}</a>
+                                          </li> 
+                                      </ul>
+                                  </volist>
+                                  <br>
+                                  <ul class="pagination">{$page} </ul>
+                              </div>
+                              
+                          </div>
+                      </div>
+                </div>
+          </div>
+        </div>
+        <script>
+            $(function(){
+                $(".write-article").click(function(){
+                     window.location="{:U('Ucenter/add')}";
+                });
+            });
+        </script>
+     <include file="Public/footer"/>
+   </body>
+  </html>

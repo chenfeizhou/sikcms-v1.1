@@ -1,0 +1,26 @@
+ <volist name="comment_list"  id="vo">         
+                <div class="media media-x  border-bottom border-dashed padding-bottom">
+                    <div class="box-show">
+                        <a class="float-left" href="{:U('User/center',array('id'=>$vo['userid']))}">
+                            <img src="__STATIC__/avator/{$vo.user_header}" style="width: 40px;"  class="radius" alt="...">
+                        </a>
+                        <a class="float-right" onclick="comment_reply(this)" data-pid="{$vo.id}" data-userid="{$vo.userid}" data-nickname="{$vo.nickname}" href="javascript:void(0)">回复<?php if($vo['reply_nums']>0){ ?>({$vo.reply_nums})<?php } ?></a>
+                    </div>
+                    <div class="media-body">
+                        <strong >{$vo.nickname} <font class="text-gray text-small">{$vo.ctime|friendlyDate}</font></strong>{$vo.content}
+                        <volist name="vo['reply_list']" id="item">
+                            <div class="media media-x ">
+                                <div class="box-show">
+                                    <a class="float-left"  href="{:U('User/center',array('id'=>$item['userid']))}">
+                                        <img src="__STATIC__/avator/{$item.user_header}" style="width: 40px;" class="radius"  alt="...">
+                                    </a>
+                                    <a class='float-right' data-userid="{$item.userid}" data-pid="{$vo.id}" data-nickname="{$item.nickname}" onclick="comment_reply(this)" href='javascript:void(0)'>回复</a>
+                                </div>
+                                <div class="media-body">
+                                    <strong>{$item.nickname}@{$item.reply_username} <font class="text-gray text-small">{$item.ctime|friendlyDate}</font></strong> {$item.content}
+                                </div>
+                            </div>
+                        </volist>
+                    </div>
+                </div>
+            </volist>   

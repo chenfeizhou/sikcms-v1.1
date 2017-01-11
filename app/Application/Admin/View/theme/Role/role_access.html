@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="__STATIC__/assets/jquery.treeview/jquery.treeview.css" /> 
+<script type="text/javascript" src="__STATIC__/assets/layer/jquery1.9.1.js?{:C('KLCHOU_BUILD')}"></script>
+<script type="text/javascript" src="__STATIC__/assets/layer/layer.js?{:C('KLCHOU_BUILD')}"></script>
+<script type="text/javascript" src="__STATIC__/assets/jquery.treeview/jquery.treeview.js?{:C('KLCHOU_BUILD')}"></script>  
+
+<div id="page-role-access-edit" >
+    <div id="page-content" >
+        <form id="editAccessForm" class="col-md-12 form-label-right center-margin"  >
+            <input type="hidden" name="roleid" value="{$roleid}"/>
+            <include file="public_menu_select"/>
+            <div class="layui-layer-btn" style="display:none" >
+                <a class="layui-layer-btn0"> <button id="editaccess-form-button"  class='layui-layer-btn0 ' style="border:0px;" type='submit'>提交</button></a>
+                <a class="layui-layer-btn1"><button id="editaccess-form-cancel" class='layui-layer-btn1' style="border:0px;" type='submit'>取消</button></a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#editaccess-form-button").click(function(){
+        var form = $('#editAccessForm');
+        var roleid=  $("input[name='roleid']").val();
+        var action_url = "{:U('Role/roleAccess')}"+'&id='+roleid;
+        $("#submitbtn").attr("disabled", true);
+        $("#saveandjump").attr("disabled", true);
+        var ids = new Array(); 
+        $("input[name='ids']").each(function(){
+           if($(this).prop('checked')){
+               ids.push($(this).val());
+           } 
+        })
+        $.post(action_url, {ids:ids}, function (data) {
+            $("#submitbtn").removeAttr("disabled");
+            $("#saveandjump").removeAttr("disabled");
+            if (data.status == 1) {
+                layer.msg(data.info);
+                parent.location.reload();
+            } else {
+              layer.msg(data.info);
+            }
+         }, 'json'); 
+        return false;
+        
+    })
+    });
+</script>

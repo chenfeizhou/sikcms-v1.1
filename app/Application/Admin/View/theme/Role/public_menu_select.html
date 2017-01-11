@@ -1,0 +1,53 @@
+
+<script type="text/javascript">
+    $(function() {
+    $("#tree").treeview({
+        collapsed: false,
+                animated: "medium",
+                control:"#sidetreecontrol",
+                persist: "location"
+        });
+        //勾选与不勾选
+       $("input[name='ids']").on('click',function(){
+        if($(this).prop('checked')){
+          $(this).parent('li').children('ul').find('input').prop('checked',true);
+        }else{
+          $(this).parent('li').children('ul').find('input').prop('checked',false);
+        }
+       });
+    })
+ 
+</script>
+<style>
+    .treeview a.selected{
+        background-color: none;
+    }
+    .treeview, .treeview ul{
+        text-decoration: none;
+    }
+</style>
+<div id="sidetree">
+    <ul id="tree">
+        <?php  echo_menu_tree($data); ?>
+    </ul>
+</div>
+
+<?php  
+    function echo_menu_tree($menulist){
+    foreach($menulist as &$item ){
+    if($item['checked']==1){
+       echo "<li><input type='checkbox' checked='checked' name='ids' value='".$item['id']."'>";
+     }else{
+      echo "<li><input type='checkbox'  name='ids' value='".$item['id']."'>";
+     }
+    ?>
+    <a href=""><?php echo $item['text']; ?></a>
+ <?php  
+    if(!empty($item['children'])){ 
+    echo "<ul style=''>";
+    echo_menu_tree($item['children']);
+    echo "</ul></li>";
+      }
+    }
+   }
+?>    

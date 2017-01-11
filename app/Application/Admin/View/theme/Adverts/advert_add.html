@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>广告位管理</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <include  file="Common:script"/>
+    <script type="text/javascript" src="__STATIC__/assets/layer/jquery1.9.1.js?{:C('KLCHOU_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/assets/layer/layer.js?{:C('KLCHOU_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/assets/validateform/jquery.validate.js?{:C('KLCHOU_BUILD')}"></script>
+
+    <body>
+        <!-- #page-title -->
+    <include file="Common:curpos"/>	
+    <div id="page-user-changepwd" >
+        <div id="page-content" >
+            <form id="advertform" class="col-md-12 form-label-right center-margin" method="post" action="{:U('Adverts/addAdvert')}">
+                <input type="hidden" name="advert_id" value="{$info.advert_id}"/>
+                <div class="form-row">
+                    <div class="form-label col-md-1">
+                        <label for="">
+                            广告标示:
+                            <span class="required">*</span>
+                        </label>
+                    </div>
+                    <div class="form-input col-md-4">
+                        <input type="text" class="parsley-validated" data-required="true" value="" data-trigger="change"  name="type" id="type">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-label col-md-1">
+                        <label for="">
+                            广告位名称：
+                            <span class="required">*</span>
+                        </label>
+                    </div>
+                    <div class="form-input col-md-4">
+                        <input type="text" class="parsley-validated" data-required="true" value="{$info.title}" data-trigger="change"  name="title" id="title">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-label col-md-1">
+                        <label for="">
+                            是否启用：
+                            <span class="required"></span>
+                        </label>
+                    </div>
+                    <div class="form-input col-md-3">
+                        <select name="status" id="status">
+                            <option value="true" >启用</option>
+                            <option value="false" >关闭</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-input col-md-10 col-md-offset-1">
+                    <button id="submit-btn" type="submit" class="btn medium primary-bg radius-all-2">添加</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .table td {
+            padding: 5px 16px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(function(){
+        var validator = $("#advertform").validate({
+       rules: {
+                title:{required:true}
+            },
+       messages: { title: "广告位标题不能为空"},
+       showErrors: function (errorMap, errorList) {
+                if (errorList && errorList.length > 0) {
+                    $.each(errorList, function (index, obj) {
+                        var item = $(obj.element);
+                        //给输入框添加出错样式
+                        item.addClass('parsley-error');
+                        item.attr("title", obj.message);
+                    });
+                } else {
+                    var item = $(this.currentElements);
+                    item.removeClass('parsley-error');
+                    item.removeAttr("title");
+                }
+            },
+                submitHandler: function() {
+                var $form = $("#advertform");
+                var $btn = $("#submit-btn");
+                var action_url = $form.attr('action');
+                if ($btn.hasClass("disabled")) return;
+                var submitData = {
+                        type:$("input[name='type']",$form).val(),
+                        title: $("input[name='title']", $form).val(),
+                        status:$("select[name='status']", $form).val()
+                };
+                $.post(action_url, {info:submitData}, function(data) {
+                if (data.status == 1) {
+                layer.msg(data.info);
+                window.location.href = data.url;
+                } else {
+                layer.msg(data.info);
+                }
+                }, "json");
+                return false;
+                }
+        });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>模型对应 模板</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <include  file="Common:script"/>
+    <script type="text/javascript" src="__STATIC__/assets/layer/jquery1.9.1.js?{:C('KLCHOU_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/assets/layer/layer.js?{:C('KLCHOU_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/js/public.js?{:C('KLCHOU_BUILD')}"></script>
+    <body>
+        <!-- #page-title -->
+    <include file="Common:curpos"/>	
+    <div id="page-content">
+      
+       <div class="content-box">
+                    <h3 class="content-box-header ui-state-default">
+                        <span>默认模板文件，开发者可进入相应模板文件中修改</span>
+                    </h3>
+                    <div class="content-box-wrapper">
+                        封面模板：{$template.index_template} 
+                        <br>
+                        列表模板：{$template.list_template} 
+                         <br>
+                        详情模板：{$template.article_template}  
+                    </div>
+                </div>
+    </div>
+       
+
+    <script type='text/javascript'>
+      $('tbody').on('click','.delete', function(){
+        var id = $(this).attr('data-id');
+        var ids  = [id];
+        var delete_url = "{:U('Channel/delete')}";
+        if (confirm("确定要删除!")){
+        $.post(delete_url, {ids:ids}, function(data){
+        if (data.status == 1){
+            layer.msg(data.info);
+              window.location.reload();
+            } else{
+               layer.msg(data.info);
+            }
+            }, 'json');
+        } 
+        });
+    </script>
+
+</html>

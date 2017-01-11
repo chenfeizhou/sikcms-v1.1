@@ -1,0 +1,18 @@
+<?php 
+
+echo_channel_option($channel);
+
+
+      
+  function echo_channel_option($channel){
+
+         foreach($channel as &$item){ 
+          echo "<option value='".$item['id']."'>".level_space($item['level']).$item['name']."</option>";
+          if(is_array($item['children'])){
+            echo_channel_option($item['children']);
+          }
+         }
+      }
+?>
+
+

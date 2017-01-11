@@ -1,0 +1,29 @@
+ <div class='panel'>
+                        <div class="panel-head bg-white ">
+                            <strong class="icon-user text-main doc-h3"> <?php if($userinfo){ ?>欢迎{$userinfo['username']}<?php }else{ ?>登录<?php } ?></strong>
+                        </div>
+     <?php if($userinfo){ ?>
+     <div class="panel-body">
+         <div class="form-group">
+              您好:{$userinfo['nickname']}              
+           </div>
+         <div class="form-group">
+              目前你是第{$userinfo['userid']}位访客 , 当前IP:<?php echo get_client_ip(); ?>                 
+          </div>
+     </div>
+     <?php }else{ ?>
+                        <div class="panel-body">
+                            <form action="{:U('Member/login')}" method="post">
+                            <div class="form-group">
+                                <input type="text" class="input" placeholder="用户名" name="username"/>
+                            </div>
+                            <div class="form-group">
+                                  <input type="password" class="input" placeholder="密码" name="password"/>
+                            </div>
+                            <div class="form-group">
+                                <button class="button bg-main" id="login" type="submit">登录</button>&nbsp;&nbsp;<a href="{:U('Member/register')}">没有帐号?去注册</a>
+                            </div>
+                                </form>
+                        </div>
+     <?php } ?>
+     </div>

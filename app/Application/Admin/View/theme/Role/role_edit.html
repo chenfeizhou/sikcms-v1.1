@@ -1,0 +1,152 @@
+
+<div id="page-role-edit" style="display: none;">
+    <div id="page-content" >
+        <h3></h3>
+        <form id="editRoleForm" class="col-md-12 form-label-right center-margin" method="post" action="{:U('Role/roleEdit')}">
+            <input type="hidden" name="id" value="" />
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        角色名称:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input  required type="text" class="control-input "  name="name"  >
+
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        角色描述:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <textarea required  class="small-textarea" name="remark"></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        排序:
+                        <span class="required"></span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="listorder" name="listorder" id="name">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        是否启用:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <select name="status" id="status">
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>       
+                    </select>
+
+                </div>
+            </div>
+
+            <div class="layui-layer-btn" style="display:none;">
+
+                <a class="layui-layer-btn0"> <button id="editrole-form-button"  class='layui-layer-btn0 ' style="border:0px;" type='submit'>提交</button></a>
+
+                <a class="layui-layer-btn1"><button id="editrole-form-cancel" class='layui-layer-btn1' style="border:0px;" type='submit'>取消</button></a>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+<script>
+    $('.editRoleLayer').on('click', function () {
+        //赋值
+        var form=$("#editRoleForm");
+        var id = $(this).attr('data-id');
+        var get_role_url = "{:U('Role/roleEdit')}"+'&id='+id;
+       $.get(get_role_url,{},function(data){
+          var data=data.info;
+            $("input[name='id']",form).val(data.id);
+            $("input[name='name']",form).val(data.name);
+            $("textarea[name='remark']", form).val(data.remark);
+            $("input[name='listorder']", form).val(data.listorder);
+            $("select[name='status']", form).val(data.status);
+       }); 
+        layer.open({
+            type: 1,
+            area: ['540px', '350px'],
+            title: '编辑角色',
+            shadeClose: true, //点击遮罩关闭层
+            content: $('#page-role-edit'), //捕获的DIV
+            btn: ['保存', '取消'],
+            cancel: function (index) {
+                layer.close(index); 
+            },
+            yes: function () {
+                //绑定提交表单时间
+                $('#editrole-form-button').trigger('click');
+
+            }
+        });
+    });
+    $(function () {
+        $('#editRoleForm').validate({
+            rules: {
+                role_name: {required: true},
+                remark: {required: true}
+            },
+            messages: {
+                name: "角色名称必须",
+                remark: "角色描述必须",
+            },
+            showErrors: function (errorMap, errorList) {
+                if (errorList && errorList.length > 0) {
+                    $.each(errorList, function (index, obj) {
+                        var item = $(obj.element);
+                        //给输入框添加出错样式
+                        item.addClass('parsley-error');
+                        item.attr("title", obj.message);
+                    });
+                } else {
+                    var item = $(this.currentElements);
+                    item.removeClass('parsley-error');
+                    item.removeAttr("title");
+                }
+            },
+            submitHandler: function () {
+                var submitButton = $(this.submitButton);
+                var form = $('#editRoleForm');
+                var action_url = form.attr('action');
+                $("#submitbtn").attr("disabled", true);
+                $("#saveandjump").attr("disabled", true);
+                var submitData = {
+                    id:$("input[name='id']",form).val(),
+                    name: $("input[name='name']", form).val(),
+                    remark: $("textarea[name='remark']", form).val(), 
+                    listorder: $("input[name='listorder']", form).val(),
+                    status: $("select[name='status']", form).val()
+                };
+
+                $.post(action_url, {info: submitData}, function (data) {
+                    $("#submitbtn").removeAttr("disabled");
+                    $("#saveandjump").removeAttr("disabled");
+                    layer.msg(data.info);
+                    if (data.status == 1) {
+                        layer.msg('保存成功');
+                        window.location.reload();
+                    } else {
+                        layer.msg(data.info);
+                    }
+                }, 'json');
+                return false;
+            }
+        });
+    });
+</script>

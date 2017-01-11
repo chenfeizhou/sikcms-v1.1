@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <title>系统设置</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <include  file="Common:script"/>
+    <script type="text/javascript" src="__STATIC__/assets/layer/jquery1.9.1.js?{:C('SIKCMS_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/assets/layer/layer.js?{:C('SIKCMS_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/assets/validateform/jquery.validate.js?{:C('SIKCMS_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/js/public.js?{:C('SIKCMS_BUILD')}"></script>
+    <body>
+    <include file="Common:curpos"/>
+    <div id="page-content">
+    <div class="tabs ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <div class="infobox notice-bg">
+            <h4 class="infobox-title">若需添加字段，可在config表中添加</h4>
+         </div>
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
+            <li class="ui-state-default ui-tabs-active ui-state-active" role="tab" tabindex="0" aria-controls="normal-tabs-1" aria-labelledby="ui-id-4" aria-selected="true">
+                <a href="#normal-tabs-1" title="站点设置" class="ui-tabs-anchor" role="presentation" tabindex="1" id="ui-id-4">
+                    站点设置
+                </a>
+            </li>
+            <li class="ui-state-default " role="tab" tabindex="1" aria-controls="normal-tabs-2" aria-labelledby="ui-id-5" aria-selected="false">
+                <a href="#normal-tabs-2" title="附件设置" class="ui-tabs-anchor" role="presentation" tabindex="2" id="ui-id-5">
+                    附件设置 
+                </a>
+            </li>
+           
+        </ul>
+
+        <form class="edit_form" class="col-md-12 form-label-right center-margin" method="post" action="{:U('Index/setting')}">
+                    <div id="normal-tabs-1" aria-labelledby="ui-id-4" class="ui-tabs-panel "  aria-expanded="true" aria-hidden="false" style="display: block;">
+                        <div class="col-md-12">
+                        <div class="content-box mrg25B">
+                               <table class="table table-striped text-center">
+                                   <thead>
+                                    <tr><th width='20%' class='text-center'>参数信息</th><th class='text-center'>参数值</th><th class='text-center'>变量值</th></tr>
+                                   </thead>
+                                   <tbody>
+                                        <volist name="set_list" id="item">
+                                            <if condition="$item.groupid eq 1">
+                                              <tr><td align='center'>{$item.info}:</td><td> <div class="form-input "> <input type="text"  class="parsley-validated" data-required="true" value="{$item.value}"   name="{$item.valuename}" ></div> </td><td>{$item.valuename}</td></tr>
+                                            </if>
+                                        </volist>
+                                    </tbody>
+                               </table>
+                            </div>       
+                            </div>
+                    </div>
+                    <div id="normal-tabs-2"  class="ui-tabs-panel " role="tabpanel" style="display: none;" >
+                       <div class="col-md-12">
+                        <div class="content-box mrg25B">
+                               <table class="table table-striped text-center">
+                                   <thead>
+                                    <tr><th width='20%' class='text-center'>参数信息</th><th class='text-center'>参数值</th><th class='text-center'>变量值</th></tr>
+                                   </thead>
+                                   <tbody>
+                                        <volist name="set_list" id="item">
+                                            <if condition="$item.groupid eq 2">
+                                            <tr><td align='center'>{$item.info}:</td><td> <div class="form-input "> <input type="text"  class="parsley-validated" data-required="true" value="{$item.value}"   name="{$item.valuename}" ></div> </td><td>{$item.valuename}</td></tr>
+                                            </if>
+                                        </volist>
+                                    </tbody>
+                               </table>
+                            </div>       
+                            </div>
+                    </div>
+                    <div class="form-input col-md-10 col-md-offset-1">
+                        <button id="submit-btn" type="submit" class="btn medium primary-bg radius-all-2">保存</button>
+                        <button id="cancel-btn" type="submit" class="btn medium ui-state-default buttonPrevious ">返回</button>
+                    </div>  
+                    </form>
+                </div>
+        </div>
+    
+</body>
+</html>

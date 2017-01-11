@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>广告列表管理</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <include  file="Common:script"/>
+    <script type="text/javascript" src="__STATIC__/assets/layer/jquery1.9.1.js?{:C('KLCHOU_BUILD')}"></script>
+
+    <script type="text/javascript" src="__STATIC__/assets/layer/layer.js?{:C('KLCHOU_BUILD')}"></script>
+    <body>
+        <!-- #page-title -->
+    <include file="Common:curpos"/>	
+
+
+    <style>
+        .table td {
+            padding: 5px 16px;
+        }
+    </style>
+
+
+    <div id="page-content">
+        <div class="row fg-toolbar ui-toolbar ">
+            <a href="{:U('Adverts/addList')}"  class="btn medium bg-gray ">
+                <span class="button-content">添加</span>
+            </a>
+        </div>
+        <p class="font-gray-dark"></p>
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>广告ID</th>
+                        <th>广告标题</th>
+                        <th>广告类型</th>
+                        <th>广告图片</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                <volist name="list"  id="item">
+                    <tr class="sub_menu1">
+                        <td>{$item.advert_id}</td>
+                        <td>{$item.type}</td>
+                        <td>{$item.title}</td>
+                        <td>{$item.ctime|date='Y-m-d H:i:s',###}</td>
+                        <td><if condition="$item['status'] eq 'true'">启用<else />关闭</if></td>
+                <td>  <a title=""  href="{:U('Adverts/advert_edit',array('advert_id'=>$item['advert_id']))}" data-placement="top" class="btn medium ui-state-default" data-original-title="Edit">
+                            <span class="glyph-icon icon-edit button-content editAdvertsLayer">编辑</span>
+                        </a>
+                        <a title="" data-id="{$item.advert_id}"  data-placement="top" class="btn small bg-white tooltip-button advertsDelete"  href="#" data-original-title="Remove">
+                            <span class="glyph-icon icon-remove " ></span>删除
+                        </a></td>
+                    </tr> 
+                </volist>
+
+                </tbody>
+            </table>  
+        </div>
+        <div class="row">{$page}</div>
+    </div>
+
+    <!--adverts delete--->
+    <script type="text/javascript">
+        $('tbody').on('click','.advertsDelete', function(){
+        var id = $(this).attr('data-id');
+        var ids  = [id];
+        var delete_menu_url = "{:U('Adverts/advert_delete')}";
+        if (confirm("确定要删除!")){
+        $.post(delete_menu_url, {ids:ids}, function(data){
+        if (data.status == 1){
+            layer.msg('删除成功');
+              window.location.reload();
+            } else{
+               layer.msg('删除失败');
+            }
+            }, 'json');
+        } 
+        });
+    </script>
+</body>
+</html>

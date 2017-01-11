@@ -1,0 +1,91 @@
+            <div id="page-header" class="clearfix">
+                <div id="header-logo">
+
+                    <a href="javascript:;" class="tooltip-button" data-placement="bottom" title="Close sidebar" id="close-sidebar">
+                        <i class="glyph-icon icon-caret-left"></i>
+                    </a>
+                    <a href="javascript:;" class="tooltip-button hidden" data-placement="bottom" title="Open sidebar" id="rm-close-sidebar">
+                        <i class="glyph-icon icon-caret-right"></i>
+                    </a>
+                    <a href="javascript:;" class="tooltip-button hidden" title="Navigation Menu" id="responsive-open-menu">
+                        <i class="glyph-icon icon-align-justify"></i>
+                    </a>
+                   快乐筹CMS后台管理<i class="opacity-80">1.0</i>
+                </div>
+				<div id="header-menu">
+				<foreach name="menuList" item="menu">
+				 <a href="{:U('Index/index',array('menuid'=>$menu['id']))}" >{$menu.name}</a>
+				</foreach>
+				</div>
+                <div class="hide" id="black-modal-60" title="Modal window example">
+                    <div class="pad20A">
+
+                        <div class="infobox notice-bg">
+                            <div class="bg-azure large btn info-icon">
+                                <i class="glyph-icon icon-bullhorn"></i>
+                            </div>
+                            <h4 class="infobox-title">Modal windows</h4>
+                            <p>Thanks to the solid modular Fides Admin arhitecture, modal windows customizations are very flexible and easy to apply.</p>
+                        </div>
+
+                        <h4 class="heading-1 mrg20T clearfix">
+                            <div class="heading-content" style="width: auto;">
+                                Icons
+                                <small>
+                                    All icons across the Fides Admin Framework use FontAwesome icons.
+                                </small>
+                            </div>
+                            <div class="clear"></div>
+                            <div class="divider"></div>
+                        </h4>
+
+                    </div>
+                </div>
+
+                
+                <div class="user-profile hidden-mobile">
+                    <a href="javascript:;" title="" id="open-left-menu" class="updateEasyPieChart user-ico clearfix">
+                        前台首页
+                    </a>
+                </div>
+                <div class="user-profile dropdown">
+                    <a href="javascript:;" title="" class="user-ico clearfix" data-toggle="dropdown">
+                        <img width="36" src="__STATIC__/assets/images/gravatar.jpg" alt="">
+                        <span>admin</span>
+                        <i class="glyph-icon icon-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu float-right">
+                        <li>
+                            <a href="javascript:;" title="">
+                                <i class="glyph-icon icon-user mrg5R"></i>
+                                超级管理员
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" title="">
+                                <i class="glyph-icon icon-cog mrg5R"></i>
+                                个人信息
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" title="">
+                                <i class="glyph-icon icon-flag mrg5R"></i>
+                                修改密码
+                            </a>
+                        </li>
+						   <li>
+                           <a title="" href="{:U('Public/logout')}">
+							 <i class="glyph-icon icon-signout font-size-13 mrg5R"></i>
+							 <span class="font-bold">退出</span>
+						   </a>
+                        </li>
+                        <li class="divider"></li>
+                    </ul>
+                </div>
+        
+				<div class="top-icon-bar">
+				
+
+			   </div>
+
+            </div>

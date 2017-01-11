@@ -1,0 +1,24 @@
+<div id="page-sidebar" class="scrollable-content">
+    <div id="sidebar-menu">
+        <ul class="top">
+            <foreach name="menuitem" item="menus">
+                <li>
+                    <a href="javascript:;" title="{$menus.name}">
+                        <i class="glyph-icon icon-code"></i>
+                        {$menus.name}
+                    </a>
+                    <ul>
+                        <foreach name="menus.children" item="item">
+                            <li>
+                                <a href="{$item.url}" target="iframeId-content" title="{$item.name}">
+                                    <i class="glyph-icon icon-chevron-right"></i>
+                                    {$item.name}
+                                </a>
+                            </li>
+                        </foreach>   
+                    </ul>
+                </li>
+            </foreach>
+        </ul>
+    </div>
+</div>

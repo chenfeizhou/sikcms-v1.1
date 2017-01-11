@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>跳转提示</title>
+    </head>
+    <body>
+        <include file="Common:script"/>
+        <div class="infobox success-bg">
+            <p><i class="glyph-icon icon-exclamation mrg10R">{$message}</i><b id="time">3</b>秒后自动调转 <a target="_self" href="<?php echo($jumpUrl); ?>">立即调转</a></p>
+        </div>
+        <!--倒计时跳转-->
+        <script language="JavaScript" type="text/javascript">
+            function delayURL(url) {
+                var delay = document.getElementById("time").innerHTML;
+                if (delay > 0) {
+                    delay--;
+                    document.getElementById("time").innerHTML = delay;
+                } else {
+                    window.top.location.href = url;
+                }
+                setTimeout("delayURL('" + url + "')", 2000);
+            }
+        </script>
+        <script type="text/javascript">
+            delayURL("{$jumpUrl}");
+        </script>
+
+    </body>   
+
+</html>
+
+

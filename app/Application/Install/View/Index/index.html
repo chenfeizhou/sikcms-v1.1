@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<meta charset="UTF-8" />
+<head>
+   <title>{$Title}-{$Version},安装向导</title>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/assets/css/minified/aui-production.min.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/assets/themes/minified/fides/common.min.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/assets/themes/minified/fides/color-schemes/dark-blue.min.css">
+       <script type="text/javascript" src="__STATIC__/js/jquery1.9.1.js"></script>
+</head>   
+<style>
+    .boxed-layout #page-wrapper, .container{max-width:950px;}
+</style>
+<body class="boxed-layout" style="overflow: auto;" >
+    <div id="page-wrapper" class="demo-example " >
+      <include file="header"/>
+      <include file="sidebar"/>
+       <div id="page-content-wrapper">
+         <switch name="step">
+            <case value="step1" ><include file='step1'/></case>
+            <case value="step2" ><include file='step2'/></case>
+            <case value="step3" ><include file='step3'/></case>
+            <case value="step4" ><include file='step4'/></case>
+            <case value="step5" ><include file='step5'/></case>
+         </switch>
+          <include file="footer"/>
+       </div>
+    </div>
+    </body>
+</html>

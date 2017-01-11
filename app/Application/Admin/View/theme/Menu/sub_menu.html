@@ -1,0 +1,31 @@
+
+<volist name="list"  id="item">  
+ 
+                   <tr class="sub_menu{$item['level']}">
+                        <td>{$item.id}</td>
+                        <td class="font-bold text-left">  
+                            <php>
+                              //空格
+                             $space="";
+                             for($i=0;$i<($item['level']-1)*2;$i++){
+                             $space .="&nbsp;&nbsp;";
+                             }   
+                             echo $space;
+                            </php>
+                           <a class="menu_tree" menu-level="{$item.level}" onclick="menu_tree(this,'close')" href="javascript:void(0)" is-load="0" note-id="{$item.id}" ><i class="glyph-icon icon-plus"></i> {$item.name}</a> </td>
+                        <td>{$item.controller}</td>
+                        <td>{$item.action}</td>
+                        <td>{$item.params}</td>
+                        <td>{$item.level}</td>
+                        <td>{$item.sort}</td>
+                        <td><if condition="$item['status'] eq 1">显示<elseif condition="$item['status'] eq 2"  />隐藏<else />删除</if></td>
+                    <td>
+                        <a title=""  href="#" data-placement="top" class="btn medium ui-state-default" data-original-title="Edit">
+                            <span class="glyph-icon icon-edit button-content editMenuLayer" data-id="{$item.id}">编辑</span>
+                        </a>
+                        <a title="" data-id="{$item.id}"  data-placement="top" class="btn small bg-white tooltip-button menuDelete"  href="#" data-original-title="Remove">
+                            <span class="glyph-icon icon-remove " ></span>删除
+                        </a>
+                    </td>
+                    </tr> 
+            </volist>

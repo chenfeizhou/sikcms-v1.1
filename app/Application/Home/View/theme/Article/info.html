@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<include file="Public/header"/>
+<body>
+     <include file="Public/nav"/> 
+        <div class="container padding-top">
+            <div class="line-big">
+                <div class="xs9"> 
+                 <include file="Public/curpos"/>
+                    <div class="detail">
+                        <div class="border-top padding-top" ></div>
+                        <h1><articleinfo name="title" fun="trim('###')" />  </h1>
+                        <p class="text-center"> 时间：<articleinfo name="inputtime" fun="date('Y-m-d H:i','###')"/> 作者：<articleinfo name="username" /> 来源：sikcms</p>
+                         <div class="border-bottom padding-bottom"></div>
+                        <p> <articleinfo name="content" fun="trim('###')"/> </p>
+                    </div>
+                   <div class="comment ">
+                      <include file="Public/Comment"/>
+                   </div>
+                </div>
+                <div class="xs3"> 
+                    <include file="Public/download"/>
+                    <br>
+                     <include file="Public/login"/>
+                </div> 
+            </div>
+          
+        </div>
+
+      <include file="Public/footer"/>
+    </body>
+</html>

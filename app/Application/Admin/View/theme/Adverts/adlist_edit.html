@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>广告位管理</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <include  file="Common:script"/>
+    <script type="text/javascript" src="__STATIC__/assets/layer/jquery1.9.1.js?{:C('KLCHOU_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/assets/layer/layer.js?{:C('KLCHOU_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/assets/validateform/jquery.validate.js?{:C('KLCHOU_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/uploadify-v3.1/jquery.uploadify-3.1.min.js?v={:CODE_UPGRADE_DATE}"></script>
+    <body>
+        <!-- #page-title -->
+    <include file="Common:curpos"/>	
+    <div id="page-user-changepwd" >
+        <div id="page-content" >
+            <form id="advertform" class="col-md-12 form-label-right center-margin" method="post" action="{:U('Adverts/editList')}">
+                <input type="hidden" name="id" value="{$info.id}"/>
+                <div class="form-row">
+                    <div class="form-label col-md-1">
+                        <label for="">
+                            广告位选择:
+                            <span class="required">*</span>
+                        </label>
+                    </div>
+                    <div class="form-input col-md-4">
+                         <select name="advert_id">
+                            <volist name="adv_list" id="item">
+                                <option  <if condition="$item['advert_id'] eq $info['advert_id']">selected</if> value="{$item.advert_id}">{$item.title}</option>
+                            </volist>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-label col-md-1">
+                        <label for="">
+                            广告标题：
+                            <span class="required">*</span>
+                        </label>
+                    </div>
+                    <div class="form-input col-md-4">
+                        <input type="text" class="parsley-validated" data-required="true" value="{$info.title}" data-trigger="change"  name="title" >
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-label col-md-1">
+                        <label for="">
+                             连接地址：
+                            <span class="required"></span>
+                        </label>
+                    </div>
+                    <div class="form-input col-md-4">
+                        <input type="text" class="parsley-validated" data-required="true" value="{$info.url}" data-trigger="change"  name="url" >
+                    </div>
+                </div>
+         <div class="form-row">
+                    <div class="form-label col-md-1">
+                        <label for="">
+                            广告图片:
+                            <span class="required"></span>
+                        </label>
+                    </div>
+                    <div class="form-img col-md-4">
+                        <!--图片显示区-->
+                        <ul class="imglist" id="show_pic">
+                            <img src="{$info.imgs}" style='border:0px; width: 100px;'/>
+                        </ul>
+                        <div id="queue"></div>
+                        <input type="hidden" name="imgs"  value="{$info.imgs}"/>
+                        <input type="file"  id="file_upload" />
+                    </div>
+                </div>
+                
+                <div class="form-input col-md-10 col-md-offset-1">
+                    <button id="submit-btn" type="submit" class="btn medium primary-bg radius-all-2">添加</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .table td {
+            padding: 5px 16px;
+        }
+    </style>
+ <script type="text/javascript">
+        <?php $timestamp = time(); ?>
+                $('#file_upload').uploadify({
+                    'formData' : {
+                    'timestamp' : '<?php echo $timestamp;?>'
+                      },
+                    'width':66,
+                    'height':33,
+                    'fileTypeDesc' : 'Image Files',              //只允许上传图像
+                    'fileTypeExts' : '*.gif; *.jpg; *.png',      //限制允许上传的图片后缀
+                    'buttonText': '选择图片',
+                    'swf'      :'__STATIC__/uploadify-v3.1/uploadify.swf',
+                    'uploader' : "{:U('Uploads/upload')}",
+                    'onUploadSuccess' : function(file,data,response) {               //上传队列全部完成后执行的回调函数
+                            var jsonData = jQuery.parseJSON(data); 
+                            $("#show_pic img").attr('src',jsonData.path);
+                            $("input[name='imgs']").val(jsonData.path);
+                    
+                    },
+                    'onUploadError':function(file,errorCode,errorMsg,errorString){       //上传文件失败触发
+                          layer.msg('The file'+file.name+'could not be uploaded:'+errorCode);
+                    }
+        });
+    </script>   
+    <script type="text/javascript">
+        $(function(){
+        var validator = $("#advertform").validate({
+       rules: {
+                title:{required:true}
+            },
+       messages: { title: "广告位标题不能为空"},
+       showErrors: function (errorMap, errorList) {
+                if (errorList && errorList.length > 0) {
+                    $.each(errorList, function (index, obj) {
+                        var item = $(obj.element);
+                        //给输入框添加出错样式
+                        item.addClass('parsley-error');
+                        item.attr("title", obj.message);
+                    });
+                } else {
+                    var item = $(this.currentElements);
+                    item.removeClass('parsley-error');
+                    item.removeAttr("title");
+                }
+            },
+                submitHandler: function() {
+                var $form = $("#advertform");
+                var $btn = $("#submit-btn");
+                var action_url = $form.attr('action');
+                if ($btn.hasClass("disabled")) return;
+                var submitData = {
+                        id:$("input[name='id']",$form).val(),
+                        url:$("input[name='url']",$form).val(),
+                        type:$("input[name='type']",$form).val(),
+                        title: $("input[name='title']", $form).val(),
+                        imgs: $("input[name='imgs']",$form).val(),
+                        status:$("select[name='status']", $form).val()
+                };
+                $.post(action_url, {info:submitData}, function(data) {
+                if (data.status == 1) {
+                layer.msg(data.info);
+                window.location.href = data.url;
+                } else {
+                layer.msg(data.info);
+                }
+                }, "json");
+                return false;
+                }
+        });
+        });
+    </script>
+
+</body>
+</html>

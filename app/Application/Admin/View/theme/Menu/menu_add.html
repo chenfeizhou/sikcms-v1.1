@@ -1,0 +1,185 @@
+
+<div id="page-menu-add" style="display: none;">
+    <div id="page-content" >
+        <h3></h3>
+        <form id="addForm" class="col-md-12 form-label-right center-margin" method="post" action="{:U('Menu/addMenu')}">
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        上级菜单:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <select name="pid" id="pid">
+                        <volist name="menulist" id="item">
+                            <option value="{$item.id}">{$item.name}</option>
+                        </volist>
+                    </select>
+
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        菜单名称:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="name" name="name" id="name">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        模块名:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="controller" name="controller" id="controller">
+                </div>
+            </div>
+             <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        方法名:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="action" name="action" id="action">
+                </div>
+            </div>
+            
+             <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        附加参数:
+                        <span class="required"></span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="params" name="params" id="params">
+                </div>
+            </div>
+             <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        排序:
+                        <span class="required"></span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="sort" name="sort" id="sort">
+                </div>
+            </div>
+             <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        是否显示:
+                        <span class="required"></span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <select name="status" id="statuc">
+                        <option value="1">显示</option>
+                        <option value="0">隐藏</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="layui-layer-btn" style="display:none;">
+
+                <a class="layui-layer-btn0"> <button id="add-form-button"  class='layui-layer-btn0 ' style="border:0px;" type='submit'>提交</button></a>
+
+                <a class="layui-layer-btn1"><button id="add-form-cancel" class='layui-layer-btn1' style="border:0px;" type='submit'>取消</button></a>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $('#addMenuLayer').on('click', function () {
+        //加载树状选择菜单
+        
+        load_menu_select('addForm');
+   
+        layer.open({
+            type: 1,
+            area: ['540px', '430px'],
+            title: '添加菜单',
+            shadeClose: true, //点击遮罩关闭层
+            content: $('#page-menu-add'), //捕获的DIV
+            btn: ['添加', '取消'],
+            cancel: function (index) {
+                layer.close(index);
+            },
+            yes: function () {
+                //绑定提交表单时间
+                $('#add-form-button').trigger('click');
+
+            }
+        });
+    });
+    $(function () {
+        $('#addForm').validate({
+            rules: {
+                pid:{required:true},
+                name: {required: true},
+                controller: {required: true},
+                action:{required: true}
+            },
+            messages: {
+                pid: "请选择上级菜单",
+                name: "菜单名不能为空",
+                controller: "请输入模块名",
+                action: "请输入方法名"
+            },
+            showErrors: function (errorMap, errorList) {
+                if (errorList && errorList.length > 0) {
+                    $.each(errorList, function (index, obj) {
+                        var item = $(obj.element);
+                        //给输入框添加出错样式
+                        item.addClass('parsley-error');
+                        item.attr("title", obj.message);
+                    });
+                } else {
+                    var item = $(this.currentElements);
+                    item.removeClass('parsley-error');
+                    item.removeAttr("title");
+                }
+            },
+            submitHandler: function () {
+                var submitButton = $(this.submitButton);
+                var form = $('#addForm');
+                var action_url = form.attr('action');
+                $("#submitbtn").attr("disabled", true);
+                $("#saveandjump").attr("disabled", true);
+                var submitData = {
+                    pid: $("select[name='pid']", form).val(),
+                    name: $("input[name='name']", form).val(),
+                    controller: $("input[name='controller']", form).val(),
+                    action: $("input[name='action']", form).val()
+                };
+                $.post(action_url, {info: submitData}, function (data) {
+                    $("#submitbtn").removeAttr("disabled");
+                    $("#saveandjump").removeAttr("disabled");
+                    layer.msg(data.info);
+                    if (data.status == 1) {
+                        layer.msg('添加成功');
+                        window.location.reload();
+                    } else {
+                        layer.msg(data.info);
+                    }
+                }, 'json');
+                return false;
+            }
+        });
+    });
+
+</script>

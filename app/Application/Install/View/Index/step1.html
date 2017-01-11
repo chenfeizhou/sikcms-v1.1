@@ -1,0 +1,94 @@
+
+     <div class="example-box">
+         <div id="form-wizard" class="form-wizard">
+             <ul class="anchor">
+            <li>
+                <a href="{:U('step1')}" class="selected" isdone="1" rel="1">
+                  <label class="wizard-step">1</label>
+                  <span class="wizard-description">
+                     阅读协议
+                  </span>
+                </a>
+            </li>
+            <li>
+                <a href="#step-2" class="disabled" isdone="0" rel="2">
+                  <label class="wizard-step">2</label>
+                  <span class="wizard-description">
+                     检测环境
+                  </span>
+                </a>
+            </li>
+            <li>
+                <a href="#step-3" class="disabled" isdone="0" rel="3">
+                  <label class="wizard-step">3</label>
+                  <span class="wizard-description">
+                    参数配置
+                  </span>                   
+                </a>
+            </li>
+            <li>
+                <a href="#step-4" class="disabled" isdone="0" rel="4">
+                  <label class="wizard-step">4</label>
+                  <span class="wizard-description">
+                     安装进行
+                  </span>                   
+                </a>
+            </li>
+               <li>
+                <a href="#step-5" class="disabled" isdone="0" rel="4">
+                  <label class="wizard-step">5</label>
+                  <span class="wizard-description">
+                     完成安装
+                  </span>                   
+                </a>
+            </li>
+          </ul>
+         </div>
+     </div>
+
+     <div class="example-box">
+         <div class="example-code clearfix">
+             <form id="form" class="col-md-11 center-margin" method="post" action="#">
+                    <div class="form-row">
+                        <div class="form-input col-md-11">
+                            <textarea  class="large-textarea font-size-13"  style="width: 650px; height: 273px; max-width: 650px; max-height: 273px;overflow:scroll;overflow-x:hidden;"><include file="xieyi"/></textarea>
+                        </div>
+                    </div>
+                 <div class="form-row">
+                      <div class="form-input col-md-11">
+                          <div class='form-checkbox-radio col-md-10'>
+                              <input id="igreen" name="igreen" type="checkbox">
+                              <label for="">我已阅读并同意此协议</label>
+                          </div>
+                      </div>
+                 </div>
+                 <div class='actionBar'> 
+                        <div class="form-row">
+                            <div class="form-input col-md-10 col-md-offset-2">
+                                <button class="btn ui-state-default medium" onclick="history.go(-1)">
+                                   <span class="button-content">返回</span>
+                                </button>
+                                 <button class="btn primary-bg medium btn-next" >
+                                     <span class="button-content" >继续</span>
+                                  </button>
+                            
+                                </div>
+                        </div>
+                   </div>
+                 </form>
+         </div>
+     </div>
+ 
+
+<script type="text/javascript">
+    $(function(){
+       $(".btn-next").click(function(){
+           if($("#igreen").is(':checked')){
+            window.location.href = "{:U('step2')}";
+            }else{
+                alert('请阅读许可协议');
+            }
+             return false;
+       });
+    });
+</script>

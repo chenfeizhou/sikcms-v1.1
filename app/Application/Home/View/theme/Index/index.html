@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html>
+<include file="Public/header"/>
+<body>
+     <include file="Public/nav"/> 
+     <include file="Public/intro"/>
+     <include file="Public/notice"/>
+        <div class="container">
+            <div class="line-big">
+                <div class="xs9 padding-top"> 
+                    <div class="panel-head bg-white ">
+                    <strong class="icon-archive text-main doc-h3"> 最新文章</strong>
+                    </div>
+                      <ul class="list-text list-underline list-striped">
+                        <sikcms:article limit="20" order="id desc"   >
+                                 <li><span class="date">[field:inputtime|date('Y-m-d H:i:s',###)]</span><a href="{:U('Article/info',array('id'=>[field:id]))}" class="active">[field:title]</a></li>
+                        </sikcms:article>   
+                        </ul>
+                    <br>
+     <a class="button bg-main button-big" href="{:U('Article/lists')}">更多...</a>
+                </div>
+                <div class="xs3 padding-top"> 
+                   <include file="Public/download"/>
+                   <br>
+                    <include file="Public/login"/>
+                </div> 
+            </div>
+        </div>
+
+
+<include file="Public/footer"/>
+
+    </body>
+</html>

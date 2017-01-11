@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <include file="Public/header"/>
+    <body>
+        <style type="text/css">
+            .passcode {
+                position: absolute;
+                right: 0;
+                top: 0;
+                height: 35px;
+                margin: 1px;
+                border-left: solid 1px #ddd;
+                text-align: center;
+                line-height: 32px;
+                border-radius: 0 4px 4px 0;
+            }
+        </style>
+    <include file="Public/nav"/> 
+    <br>
+    <div class="container padding-top padding-bottom">
+        <div class="line-big">
+            <div class="xs12"> 
+                <div align="center">
+                    <form action="{:U('Member/login')}" method="post">
+                        <div class="panel padding" style="width: 400px;height:350px;text-align: left;">
+                            <div class="text-center">
+                                <br>
+                                <h2><strong>登录</strong></h2></div>
+                            <div class="" style="padding:30px;">
+                                <div class="form-group">
+                                    <div class="field field-icon-right">
+                                        <input type="text" class="input" name="username" placeholder="用户名" />
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="field field-icon-right">
+                                        <input type="password" class="input" name="password" placeholder="密码" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="">
+                                        <button class="button button-block bg-main text-big">登录</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <include file="Public/footer"/>
+</body>
+</html>

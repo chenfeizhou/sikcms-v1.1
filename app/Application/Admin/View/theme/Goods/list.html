@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>商品列表</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <include  file="Common:script"/>
+    <script type="text/javascript" src="__STATIC__/assets/layer/jquery1.9.1.js?{:C('KLCHOU_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/assets/layer/layer.js?{:C('KLCHOU_BUILD')}"></script>
+         <script type="text/javascript" src="__STATIC__/js/public.js?{:C('KLCHOU_BUILD')}"></script>
+    <body>
+    <include file="Common:curpos"/>	
+    <style>
+        .table td {
+            padding: 5px 16px;
+        }
+    </style>
+ <div id="page-content">
+        <div class="row fg-toolbar ui-toolbar ">
+            <a class="btn medium bg-green " href="{:U($action['addaction'])}">
+                 <span class="button-content">添加</span>
+            </a>
+              <a class="btn medium  bg-orange delete" href="javascript:void(0)">
+                 <span class="button-content">批量删除</span>
+            </a>
+           
+        </div>
+  
+    
+        <p class="font-gray-dark"></p>
+       <form id="goods-form" method="post" action="{:U($action['listaction'])}">
+           <div class="form-row">
+           
+              <div class="form-input col-md-12">
+                   <select id="" class="col-md-2" name="status">
+                       <option value='all'>不限</option>
+                       <volist name='status' id="item" k="key">
+                             <option value="{$item.value}">{$item.text}</option>
+                        </volist>
+                   </select>
+                    <div class="col-md-4">
+                   <input id="" placeholder="商品名称" name="goods_name" type="text">
+                 </div>
+                 <a href="javascript:void()" class="btn large  bg-green btnSearch" title="">
+                     <span class="button-content">搜索</span>
+                 </a>
+               </div>
+        </div>  
+         <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><input class="check-all"  type="checkbox"   ></th>
+                            <th>id</th>
+                            <th>产品名称</th>
+                              <th>产品原价</th>
+                            <th>产品价格</th>
+                            <th>录入时间</th>
+                            <th>上架状态</th>
+                            <th>阅读数</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    <volist name="list"  id="item">
+                        <tr >
+                         <td><input type="checkbox" class="ids" name="ids[]" value="{$item.goods_id}"/></td>
+                        <td>{$item.goods_id}</td>
+                        <td>{$item.goods_name}<span style="color:#fa7753 ">{$text}</span></td>
+                        <td>￥{$item.goods_price}</td>
+                        <td>￥{$item.market_price}</td>
+                        <td>{$item.inputtime|date='Ymd-His',###}</td>
+                        <td><?php if($item['marketable']=='true'){ echo '上架'; }else{echo '下架';} ?></td>
+                        <td>{$item.readpoint}</td>
+                        <td> 
+                            <a title="" href="{:U($action['editaction'],array('id'=>$item['goods_id']))}" data-placement="top" class="btn medium ui-state-default" data-original-title="Edit">
+                                 <span class="glyph-icon icon-edit button-content ">修改</span>
+                             </a>
+                             <a title="" data-id="{$item.goods_id}" data-placement="top" class="btn small bg-white tooltip-button delete" href="javascript:void(0)" data-original-title="Remove">
+                                 <span class="glyph-icon icon-remove "></span>删除
+                             </a>    
+                        </td>
+                        </tr> 
+                    </volist>
+                    </tbody>
+                </table>  
+         
+        </div>
+          <div class="row">{$page}</div>
+      </form>
+         
+    </div>
+ 
+    <script type='text/javascript'>
+       $('body').on('click','.delete', function(){
+            var id = $(this).attr('data-id');
+            var form = $("#softs-form");
+            var ids_arr = new Array();
+            $(".ids",form).each(function(){
+                 if(this.checked){
+                     ids_arr.push($(this).val())
+                   }
+             });  
+             alert(ids_arr);
+            if(id){
+                   var ids  = [id];     //单点
+            }else{
+                 var ids = ids_arr;   //批量
+            }
+            if(ids==''){
+                layer.msg('请选择要删除的项');
+                return false;
+            }
+            var delete_url = "{:U('Goods/delete')}";
+            if (confirm("确定要删除!")){
+            $.post(delete_url, {ids:ids}, function(data){
+            if (data.status == 1){
+                 layer.msg(data.info);
+                  window.location.reload();
+                } else{
+                   layer.msg(data.info);
+                }
+                }, 'json');
+            } 
+        });
+        $(function(){
+           $(".btnSearch").click(function(){
+              var form = $("#goods-form");
+               form.submit();
+           });
+        });
+        
+    </script>
+ 
+</body>
+</html>

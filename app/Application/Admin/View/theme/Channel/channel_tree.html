@@ -1,0 +1,21 @@
+ 
+<?php 
+echo channel_tree($list);
+ function channel_tree($list){
+?>
+   <volist name="list"  id="item">
+                    <tr>
+                        <td><input type="checkbox" class="ids" name="ids[]" value="{$item.id}"/></td>
+                        <td class="font-bold ext-left"><?php echo level_space($item['level']); ?><a href="javascript:void()" title="查看内容">{$item.name}</a>[ID:{$item.id}]</td>
+                        <td>{$item.count}</td>
+                        <td>
+                            <a href="{:U($item['action']['listaction'],array('channel_id'=>$item['id']))}">内容</a> | <a href="{:U('Channel/add',array('cid'=>$item['id']))}">增加子类</a> | <a href="{:U('Channel/edit',array('id'=>$item['id']))}">更改</a> | <a data-id="{$item.id}" href="javascript:void(0)" class="delete">删除</a>
+                        </td>
+                    </tr>  
+          <?php 
+           if(is_array($item['children'])){
+             channel_tree($item['children']);
+           }
+          ?>     
+        </volist>
+<?php } ?>

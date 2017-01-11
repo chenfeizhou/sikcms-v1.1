@@ -1,0 +1,108 @@
+<style>
+    .infobox{
+        margin-bottom: 5px;
+        
+    }
+</style>
+     <div class="example-box">
+         <div id="form-wizard" class="form-wizard">
+             <ul class="anchor">
+            <li>
+                <a href="{:U('step1')}" class="selected" isdone="1" rel="1">
+                  <label class="wizard-step">1</label>
+                  <span class="wizard-description">
+                     阅读协议
+                  </span>
+                </a>
+            </li>
+            <li>
+                <a href="{:U('step2')}" class="selected" isdone="0" rel="2">
+                  <label class="wizard-step">2</label>
+                  <span class="wizard-description">
+                     检测环境
+                  </span>
+                </a>
+            </li>
+            <li>
+                <a href="{:U('step3')}" class="selected" isdone="0" rel="3">
+                  <label class="wizard-step">3</label>
+                  <span class="wizard-description">
+                    参数配置
+                  </span>                   
+                </a>
+            </li>
+            <li>
+                <a href=":U('step4')}" class="selected" isdone="0" rel="4">
+                  <label class="wizard-step">4</label>
+                  <span class="wizard-description">
+                     安装进行
+                  </span>                   
+                </a>
+            </li>
+               <li>
+                <a href="#step-5" class="disabled" isdone="0" rel="5">
+                  <label class="wizard-step">5</label>
+                  <span class="wizard-description">
+                     完成安装
+                  </span>                   
+                </a>
+            </li>
+          </ul>
+         </div>
+     </div>
+    <div class="example-box">
+         <div class="example-code clearfix">
+           <div class="row">
+            <div class="col-md-12">
+                <div  id='loginner'>
+                      
+                </div>
+                <a class="btn_old" href="javascript:;">
+                        <img align="absmiddle" src="__PUBLIC__/extress/install/images/loading.gif">
+                        正在安装...
+                </a>
+            </div>
+      
+        </div>
+         </div>        
+    </div>
+
+
+        <script type="text/javascript">
+            var n = 0;
+            var data = {$data};
+            $.ajaxSetup({cache: false});
+            function reloads(n) {
+                var url = "./install.php?g=Install&m=Index&a=mysql&n=" + n;
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    dataType: 'json',
+                    beforeSend: function() {
+                    },
+                    success: function(msg) {
+                        if (msg.n == '999999') {
+                            $('#dosubmit').attr("disabled", false);
+                            $('#dosubmit').removeAttr("disabled");
+                            $('#dosubmit').removeClass("nonext");
+                           setTimeout('gonext()', 2000);
+                        }
+                        if (msg.n) {
+                            $('#loginner').append(msg.msg);
+                            reloads(msg.n);
+                        } else {
+                            //alert('指定的数据库不存在，系统也无法创建，请先通过其他方式建立好数据库！');
+                            alert(msg.msg);
+                        }
+                    }
+                });
+            }
+            function gonext() {
+                window.location.href = "{:U('step5')}";
+            }
+            $(document).ready(function() {
+                reloads(n);
+            })
+        </script> 
+

@@ -1,0 +1,120 @@
+
+     <div class="example-box">
+         <div id="form-wizard" class="form-wizard">
+             <ul class="anchor">
+            <li>
+                <a href="/install.php" class="selected" isdone="1" rel="1">
+                  <label class="wizard-step">1</label>
+                  <span class="wizard-description">
+                     阅读协议
+                  </span>
+                </a>
+            </li>
+            <li>
+                <a href="{:U('step2')}" class="selected" isdone="0" rel="2">
+                  <label class="wizard-step">2</label>
+                  <span class="wizard-description">
+                     检测环境
+                  </span>
+                </a>
+            </li>
+            <li>
+                <a href="#step-3" class="disabled" isdone="0" rel="3">
+                  <label class="wizard-step">3</label>
+                  <span class="wizard-description">
+                    参数配置
+                  </span>                   
+                </a>
+            </li>
+            <li>
+                <a href="#step-4" class="disabled" isdone="0" rel="4">
+                  <label class="wizard-step">4</label>
+                  <span class="wizard-description">
+                     安装进行
+                  </span>                   
+                </a>
+            </li>
+               <li>
+                <a href="#step-5" class="disabled" isdone="0" rel="4">
+                  <label class="wizard-step">5</label>
+                  <span class="wizard-description">
+                     完成安装
+                  </span>                   
+                </a>
+            </li>
+          </ul>
+         </div>
+     </div>
+
+     <div class="example-box">
+         <div class="example-code clearfix">
+             <div class='row col-md-12 '>
+                 <div class="content-box">
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th class="text-center">环境检测</th>
+                            <th>推荐配置</th>
+                            <th class="text-center">当前状态</th>
+                            <th class="text-center">最低要求</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>操作系统</td><td class="font-bold text-left">类UNIX</td>
+                            <td><div class="label bg-orange">{$os}</div></td>
+                            <td>不限制</td>
+                        </tr>
+                        <tr> <td>PHP版本</td><td>5.3.x</td><td>{$php_version}</td><td>5.3.0</td></tr>
+                        <tr> <td>MySQL版本</td><td>5.x.x</td><td>{$mysql}</td><td>5.2</td></tr>
+                         <tr>
+                            <td>附件上传</td><td>2M</td><td>{$uploadSize}</td><td>不限制</td>
+                        </tr>
+                        <tr>
+                            <td>SESSION</td><td>开启</td><td>{$session}</td><td>开启</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">函数支持检测</th><th  class="text-center" >当前环境</th><th class="text-center" colspan="2">程序要求</th>
+                        </tr>
+                         <volist name="function" id="rs">
+                            <tr>
+                                <td>{$key}</td><td ><if condition="$rs"><span class="correct_span">&radic;</span>支持<else/><span class="correct_span error_span">&radic;</span>不支持</if></td><td colspan="2"><span class="correct_span">&radic;</span>支持</td>
+                            </tr>
+                            </volist>
+                        <tr>
+                            <th class="text-center">目录文件权限检测</th><th class="text-center" colspan="2">写入</th><th class="text-center">读取</th>
+                        </tr>
+                        <volist name="folderInfo" id="rs">
+                            <tr>
+                                <td>{$rs.dir}</td>
+                                <td colspan="2">{$rs.is_writeable}</td>
+                                <td>{$rs.is_readable}</td>
+                            </tr>
+                        </volist>
+                    </tbody>
+                </table>
+            </div>
+             </div>
+              <div class='actionBar'> 
+                        <div class="form-row">
+                            <div class="form-input col-md-10 col-md-offset-2">
+                                <button class="btn ui-state-default medium" onclick="history.go(-1)">
+                                   <span class="button-content">后退</span>
+                                </button>
+                                 <button class="btn primary-bg medium btn-next" >
+                                     <span class="button-content" >继续</span>
+                                  </button>
+                            
+                                </div>
+                        </div>
+                   </div>
+         </div>
+     </div>
+
+<script type="text/javascript">
+    $(function(){
+       $(".btn-next").click(function(){
+            window.location.href = "{:U('step3')}";
+       });
+    });
+</script>

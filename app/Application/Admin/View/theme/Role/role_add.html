@@ -1,0 +1,177 @@
+ <script type="text/javascript" src="__STATIC__/assets/layer/jquery1.9.1.js?{:C('KLCHOU_BUILD')}"></script>
+ <script type="text/javascript" src="__STATIC__/assets/validateform/jquery.validate.js?{:C('KLCHOU_BUILD')}"></script>
+ <div id="page-role-add" style="display: none;">
+    <div id="page-content" >
+        <h3></h3>
+        <form id="addRoleForm" class="col-md-12 form-label-right center-margin" method="post" action="{:U('Role/roleAdd')}">
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        角色名称:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input  required type="text" class="control-input " name="name"  >
+
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        角色描述:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <textarea required  class="small-textarea" name="remark"></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        排序:
+                        <span class="required"></span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="listorder" name="listorder" id="name">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        是否启用:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <select name="status" id="status">
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>       
+                    </select>
+
+                </div>
+            </div>
+           
+            <div class="layui-layer-btn" style="display:none;">
+                
+                <a class="layui-layer-btn0"> <button id="addrole-form-button"  class='layui-layer-btn0 ' style="border:0px;" type='submit'>提交</button></a>
+                
+                <a class="layui-layer-btn1"><button id="addrole-form-cancel" class='layui-layer-btn1' style="border:0px;" type='submit'>取消</button></a>
+            </div>
+            
+
+        </form>
+    </div>
+
+</div>
+<script type="text/javascript">
+//弹出 tips
+//      $("#addRoleLayer").on('click',function(){
+//         layer.msg('hello layer'); 
+//          
+//      });
+//弹出页面层
+//        $("#addRoleLayer").on('click',function(){
+//      layer.open({
+//         type:1,
+//         area:['600px','360px'],
+//         shadeClose:true,//点击遮罩关闭
+//         content:'\<\div style="padding:20px;">自定义内容\<\/div>'
+//      });
+//          
+//      });
+
+//iframe
+//$('#addRoleLayer').on('click', function(){
+//    layer.open({
+//        type: 2,
+//        title: '添加角色',
+//        maxmin: false,
+//        shadeClose: true, //点击遮罩关闭层
+//        area : ['600px' , '340px'],
+//        content: "{:U('Role/roleAdd')}",
+//        btn:['添加','取消'],
+//        yes:function(){
+//         console.log($('#addRoleForm').attr('action')); 
+//        },
+//        no:function(){
+//             
+//        }
+//        
+//    });
+//});
+    //添加角色弹出
+     $('#addRoleLayer').on('click', function () {
+        layer.open({
+            type: 1,
+            area: ['540px', '350px'],
+            title: '添加角色',
+            shadeClose: true, //点击遮罩关闭层
+            content: $('#page-role-add'), //捕获的DIV
+            btn: ['添加', '取消'],
+            cancel: function (index) {
+               
+            },
+            yes: function () {
+                //绑定提交表单时间
+                $('#addrole-form-button').trigger('click');
+                 layer.close(index);
+            }
+        });
+    });
+
+    $(function () {
+        $('#addRoleForm').validate({
+            rules: {
+                role_name: {required: true},
+                remark: {required: true}
+            },
+            messages: {
+                name: "角色名称必须",
+                remark: "角色描述必须",
+            },
+            showErrors: function (errorMap, errorList) {
+                if (errorList && errorList.length > 0) {
+                    $.each(errorList, function (index, obj) {
+                        var item = $(obj.element);
+                        //给输入框添加出错样式
+                        item.addClass('parsley-error');
+                        item.attr("title", obj.message); 
+                    });
+                } else {
+                    var item = $(this.currentElements);
+                    item.removeClass('parsley-error');
+                    item.removeAttr("title");
+                }
+            },
+            submitHandler: function () {
+                var submitButton = $(this.submitButton);
+                var form = $('#addRoleForm');
+                var action_url = form.attr('action');
+                $("#submitbtn").attr("disabled", true);
+                $("#saveandjump").attr("disabled", true);
+                var submitData = {
+                    name:  $("input[name='name']", form).val(),
+                    remark: $("textarea[name='remark']", form).val(),
+                    listorder: $("input[name='listorder']", form).val(),
+                    status:$("select[name='status']",form).val()
+                };
+
+                $.post(action_url, {info:submitData}, function (data) {
+                    $("#submitbtn").removeAttr("disabled");
+                    $("#saveandjump").removeAttr("disabled");
+                     layer.msg(data.info);
+                    if (data.status == 1) {
+                        layer.msg('添加成功');
+                        window.location.reload();
+                    } else {
+                        layer.msg(data.info);
+                    }
+                }, 'json');
+                return false;
+            }
+        });
+    });
+</script>

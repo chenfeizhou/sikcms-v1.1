@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>模型管理</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <include  file="Common:script"/>
+    <script type="text/javascript" src="__STATIC__/assets/layer/jquery1.9.1.js?{:C('KLCHOU_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/assets/layer/layer.js?{:C('KLCHOU_BUILD')}"></script>
+    <script type="text/javascript" src="__STATIC__/js/public.js?{:C('KLCHOU_BUILD')}"></script>
+    <body>
+        <!-- #page-title -->
+    <include file="Common:curpos"/>	
+
+    <div id="page-content">
+        <div class="row fg-toolbar ui-toolbar ">
+            <a class="btn medium bg-gray "  href="{:U('Module/add')}">
+                <span class="button-content">添加模型</span>
+            </a>
+        </div>
+        <p class="font-gray-dark"></p>
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>频道模型名称</th>
+                        <th>识别ID</th>
+                        <th>关联表</th>
+                        <th>状态</th>
+                        <th>模型</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <volist name="list" id="item">
+                    <tr>
+                        <td>{$item.id}</td>
+                        <td>{$item.typename}</td>
+                        <td>{$item.nid}</td>
+                        <td>{$item.relation_table}</td>
+                       <td><if condition="$item['status'] eq 0">正常<else/>禁用</if></td>
+                  <td><if condition="$item['issystem'] eq 1">系统<else/>自动</if></td>
+                  <td><a href="{:U('Module/template',array('id'=>$item['id']))}">模板</a> | <a href="{:U('Module/edit',array('id'=>$item['id']))}">编辑</a> | <a href="{:U('Module/delete',array('id'=>$item['id']))}">删除</a></td></tr>
+                  </volist>
+                </tbody>
+            </table>  
+        </div>
+        <div class="row">{$page}</div>
+    </div>
+
+    <script type='text/javascript'>
+      $('tbody').on('click','.delete', function(){
+        var id = $(this).attr('data-id');
+        var ids  = [id];
+        var delete_url = "{:U('Channel/delete')}";
+        if (confirm("确定要删除!")){
+        $.post(delete_url, {ids:ids}, function(data){
+        if (data.status == 1){
+            layer.msg(data.info);
+              window.location.reload();
+            } else{
+               layer.msg(data.info);
+            }
+            }, 'json');
+        } 
+        });
+    </script>
+
+</html>

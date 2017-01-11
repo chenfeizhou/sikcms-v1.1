@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<include file="Public/header"/>
+<body>
+     <include file="Public/nav"/> 
+     <br>
+  <div class="container">
+<div class="alert alert-red">
+		<span class="close rotate-hover"></span><strong>操作失败</strong>
+		<p>
+			{$error}</p>
+                <p > 页面自动 <a id="href" href="{$jumpUrl}">跳转</a> 等待时间： <b id="wait">{$waitSecond}</b>
+                </p>
+      
+	</div>
+  </div>
+ <script type="text/javascript">
+(function(){
+var wait = document.getElementById('wait'),href = document.getElementById('href').href;
+var interval = setInterval(function(){
+	var time = --wait.innerHTML;
+	if(time <= 0) {
+		location.href = href;
+		clearInterval(interval);
+	};
+}, 1000);
+})();
+</script>
+<include file="Public/footer"/>
+    </body>
+</html>

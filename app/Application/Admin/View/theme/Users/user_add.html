@@ -1,0 +1,198 @@
+
+<div id="page-user-add" style="display: none;">
+    <div id="page-content" >
+        <h3></h3>
+        <form id="addUserForm" class="col-md-12 form-label-right center-margin" method="post" action="{:U('Users/userAdd')}">
+            <input type="hidden" name="verify" value="<?php echo randString(6); ?>"/>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        所属角色:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <select name="roleid" id="roleid">
+                        <volist name="rolelist" id="item">
+                        <option value="{$item.id}">{$item.name}</option>
+                        </volist>
+                    </select>
+
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        用户名:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="username" name="username" id="username">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        密码:
+                        <span class="required"></span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="password" class="parsley-validated" data-required="true" data-trigger="change" data-type="password" name="password" id="password">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        确认密码:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="password" class="parsley-validated" data-required="true" data-trigger="change" data-type="repassword" name="repassword" id="repassword">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        真实姓名:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="realname" name="realname" id="realname">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        邮箱:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="email" name="email" id="email">
+                </div>
+            </div>
+
+            <div class="layui-layer-btn" style="display:none;">
+
+                <a class="layui-layer-btn0"> <button id="adduser-form-button"  class='layui-layer-btn0 ' style="border:0px;" type='submit'>提交</button></a>
+
+                <a class="layui-layer-btn1"><button id="adduser-form-cancel" class='layui-layer-btn1' style="border:0px;" type='submit'>取消</button></a>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $('#addUserLayer').on('click', function () {
+        //赋值
+        var form=$("#editUserForm");
+        $("#roleid").empty();
+        var get_role_url = "{:U('Users/userAdd')}";
+       $.get(get_role_url,{},function(data){
+         $.each(data.info,function(index,obj){
+            $("#roleid").append("<option value="+index+">"+obj+"</option>"); 
+         });       
+       }); 
+        layer.open({
+            type: 1,
+            area: ['540px', '388px'],
+            title: '添加用户',
+            shadeClose: true, //点击遮罩关闭层
+            content: $('#page-user-add'), //捕获的DIV
+            btn: ['添加', '取消'],
+            cancel: function (index) {
+                layer.close(index);
+            },
+            yes: function () {
+                //绑定提交表单时间
+                $('#adduser-form-button').trigger('click');
+
+            }
+        });
+    });
+    $(function () {
+        $('#addUserForm').validate({
+            rules: {
+                roleid: {required: true},
+                username: {required: true},
+                username:{required: true},
+                password:{
+                    required: true,
+                    minlength:6,
+                    maxlength:16
+                },
+                repassword:{
+                    required: true,
+                    equalTo:'#password' 
+                        },
+                realname:{required: true},
+                email: {required: true}
+            },
+            messages: {
+                roleid: "所属角色不能为空",
+                username: "用户名不能为空",
+                 password: {
+                    require: "请输入密码",
+                    minlength:"密码长度不够",
+                    maxlength:"密码长度不能超过16"
+                 },
+                 repassword: {
+                    required: "重复密码不能为空",
+                    equalTo:"两次输入密码不相同"
+                 },
+                 realname: "真实名不能为空",
+                 email: "邮箱不能为空",  
+            },
+            showErrors: function (errorMap, errorList) {
+                if (errorList && errorList.length > 0) {
+                    $.each(errorList, function (index, obj) {
+                        var item = $(obj.element);
+                        //给输入框添加出错样式
+                        item.addClass('parsley-error');
+                        item.attr("title", obj.message);
+                    });
+                } else {
+                    var item = $(this.currentElements);
+                    item.removeClass('parsley-error');
+                    item.removeAttr("title");
+                }
+            },
+            submitHandler: function () {
+                var submitButton = $(this.submitButton);
+                var form = $('#addUserForm');
+                var action_url = form.attr('action');
+                $("#submitbtn").attr("disabled", true);
+                $("#saveandjump").attr("disabled", true);
+                var submitData = {
+                    roleid:$("select[name='roleid']", form).val(),
+                    username: $("input[name='username']", form).val(),
+                    password: $("input[name='password']", form).val(),
+                    repassword: $("input[name='repassword']", form).val(),
+                    realname: $("input[name='realname']", form).val(),
+                    email:$("input[name='email']", form).val(),
+                    verify:$("input[name='verify']",form).val(),
+                };
+
+                $.post(action_url, {info: submitData}, function (data) {
+                    $("#submitbtn").removeAttr("disabled");
+                    $("#saveandjump").removeAttr("disabled");
+                    layer.msg(data.info);
+                    if (data.status == 1) {
+                        layer.msg('添加成功');
+                        window.location.reload();
+                    } else {
+                        layer.msg(data.info);
+                    }
+                }, 'json');
+                return false;
+            }
+        });
+    });
+</script>

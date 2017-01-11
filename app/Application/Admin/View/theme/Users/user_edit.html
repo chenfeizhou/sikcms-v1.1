@@ -1,0 +1,165 @@
+
+<div id="page-user-edit" style="display: none;">
+    <div id="page-content" >
+        <h3></h3>
+        <form id="editUserForm" class="col-md-12 form-label-right center-margin" method="post" action="{:U('Users/userEdit')}">
+            <input type="hidden" name="userid" value="{$info.userid}"/>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        所属角色:
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <select name="roleid" id="roleid">
+                        <volist name="rolelist" id="item">
+                            <option value="{$item.id}">{$item.name}</option>
+                        </volist>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        用户名：
+                        <span class="required">*</span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="username" name="username" id="username">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        真实姓名：
+                        <span class="required"></span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="realname" name="realname" id="realname">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label col-md-3">
+                    <label for="">
+                        email：
+                        <span class="required"></span>
+                    </label>
+                </div>
+                <div class="form-input col-md-8">
+                    <input type="text" class="parsley-validated" data-required="true" data-trigger="change" data-type="email" name="email" id="email">
+                </div>
+            </div>
+
+            <div class="layui-layer-btn" style="display:none;">
+
+                <a class="layui-layer-btn0"> <button id="edituser-form-button"  class='layui-layer-btn0 ' style="border:0px;" type='submit'>提交</button></a>
+
+                <a class="layui-layer-btn1"><button id="edituser-form-cancel" class='layui-layer-btn1' style="border:0px;" type='submit'>取消</button></a>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+<script>
+
+    $('.editUserLayer').on('click', function () {
+        //赋值
+        var form = $("#editUserForm");
+        var id = $(this).attr('data-id');
+       
+        var action_url = "{:U('Users/userEdit')}" + '&id=' + id;
+        $.get(action_url, {}, function (data) {
+            var rolelist = data.info.rolelist;
+            var info = data.info.info;
+             $("select[name='roleid']", form).empty();
+            $.each(rolelist, function (index, obj) {
+                if (index == info.roleid) {
+                    $("select[name='roleid']", form).append("<option selected value=" + index + ">" + obj + "</option>");
+                } else {
+                    $("select[name='roleid']", form).append("<option value=" + index + ">" + obj + "</option>");
+                }
+            });
+            $("input[name='userid']", form).val(info.userid);
+            $("input[name='username']", form).val(info.username);
+            $("input[name='realname']", form).val(info.realname);
+            $("input[name='email']", form).val(info.email);
+        });
+        layer.open({
+            type: 1,
+            area: ['540px', '350px'],
+            title: '编辑角色',
+            shadeClose: true, //点击遮罩关闭层
+            content: $('#page-user-edit'), //捕获的DIV
+            btn: ['保存', '取消'],
+            cancel: function (index) {
+                layer.close(index);
+            },
+            yes: function () {
+                //绑定提交表单时间
+                $('#edituser-form-button').trigger('click');
+
+            }
+        });
+    });
+    $(function () {
+        $('#editUserForm').validate({
+            rules: {
+                roleid: {required: true},
+                username: {required: true},
+                realname: {required: true},
+                email: {required: true}
+            },
+            messages: {
+                roleid: "角色名称必须",
+                username: "用户名称必须",
+                realname: "真实姓名不能为空",
+                email: "邮箱不能为空"
+            },
+            showErrors: function (errorMap, errorList) {
+                if (errorList && errorList.length > 0) {
+                    $.each(errorList, function (index, obj) {
+                        var item = $(obj.element);
+                        //给输入框添加出错样式
+                        item.addClass('parsley-error');
+                        item.attr("title", obj.message);
+                    });
+                } else {
+                    var item = $(this.currentElements);
+                    item.removeClass('parsley-error');
+                    item.removeAttr("title");
+                }
+            },
+            submitHandler: function () {
+                var submitButton = $(this.submitButton);
+                var form = $('#editUserForm');
+                var action_url = form.attr('action');
+                $("#submitbtn").attr("disabled", true);
+                $("#saveandjump").attr("disabled", true);
+                var submitData = {
+                    roleid: $("select[name='roleid']", form).val(),
+                    userid: $("input[name='userid']", form).val(),
+                    name: $("input[name='username']", form).val(),
+                    realname: $("input[name='realname']", form).val(),
+                    email: $("input[name='email']", form).val()
+                };
+
+                $.post(action_url, {info: submitData}, function (data) {
+                    $("#submitbtn").removeAttr("disabled");
+                    $("#saveandjump").removeAttr("disabled");
+                    layer.msg(data.info);
+                    if (data.status == 1) {
+                        layer.msg('保存成功');
+                        window.location.reload();
+                    } else {
+                        layer.msg(data.info);
+                    }
+                }, 'json');
+                return false;
+            }
+        });
+    });
+</script>
